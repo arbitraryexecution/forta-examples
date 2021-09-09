@@ -1,2 +1,3 @@
 # forta-examples
-Malicious Address Detection
+
+- bix-tx-js: Flag large ether transactions (JS)
