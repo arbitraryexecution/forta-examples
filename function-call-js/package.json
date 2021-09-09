@@ -1,0 +1,18 @@
+{
+  "name": "usdt-transfer-agent",
+  "version": "0.0.1",
+  "description": "Forta agent that detects when USDT tokens are transferred",
+  "scripts": {
+    "start": "npm run start:dev",
+    "start:dev": "nodemon --watch src --watch forta.config.json -e js,json --exec 'forta-agent run'",
+    "start:prod": "forta-agent run --prod",
+    "test": "jest"
+  },
+  "dependencies": {
+    "forta-agent": "^0.0.8"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.12"
+  }
+}
