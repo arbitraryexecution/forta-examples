@@ -1,2 +1,2 @@
 # forta-examples
-forta-examples
+Malicious Address Detection
