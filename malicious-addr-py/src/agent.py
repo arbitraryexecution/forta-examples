@@ -29,7 +29,6 @@ def handle_transaction(transaction_event):
                 "from": transaction_event.transaction.from_,
                 "to": transaction_event.transaction.to,
                 "amount": transaction_event.transaction.value,
-                "hash": transaction_event.transaction.hash,
             },
         }
     )
@@ -45,7 +44,6 @@ def handle_transaction(transaction_event):
                 "from": transaction_event.transaction.from_,
                 "to": transaction_event.transaction.to,
                 "amount": transaction_event.transaction.value,
-                "hash": transaction_event.transaction.hash,
             },
         }
     )
@@ -61,25 +59,28 @@ def handle_transaction(transaction_event):
                 "from": transaction_event.transaction.from_,
                 "to": transaction_event.transaction.to,
                 "amount": transaction_event.transaction.value,
-                "hash": transaction_event.transaction.hash,
             },
         }
     )
 
+    alerts = []
+
     # If the malicious address is sending the funds, send the first alert
     if transaction_event.transaction.from_ in malicious_addrs.addrs:
-        return [send_alert]
+        alerts.append(send_alert)
 
     # If the malicious address is receiving the funds, send the second alert
     elif transaction_event.transaction.to in malicious_addrs.addrs:
-        return [receive_alert]
+        alerts.append(receive_alert)
 
     # If the malicious address is involved with the transaction but not the sender or receiver,
     # send the third alert
     elif any(
         True for addr in transaction_event.addresses if addr in malicious_addrs.addrs
     ):
-        return [intermediary_alert]
+        alerts.append(intermediary_alert)
 
     else:
         raise Exception("Error processing information")
+
+    return alerts
