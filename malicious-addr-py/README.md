@@ -2,15 +2,13 @@
 
 ## Description
 
-This agent detects transactions that involve a pre-defined malicious address
+This agent checks transactions against a pre-defined list of addresses that are known to have been involved in public hacks.
 
 ## Supported Chains
 
 - Ethereum
 
 ## Alerts
-
-Describe each of the type of alerts fired by this agent
 
 - AE-MALICIOUS-ADDR
   - Fired when the malicious address is initiating a transaction
