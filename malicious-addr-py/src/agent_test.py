@@ -15,44 +15,27 @@ def mal_addr():
 
 
 @pytest.fixture
-def alerts(mal_addr):
+def alert(mal_addr):
     """
-    List of alerts in the agent
+    The alert that should be raised by the agent
     """
-    first_alert = Finding(
+    malicious_addr_alert = Finding(
         {
-            "name": "Malicious Address Send",
-            "description": "Malicious address is starting a transaction",
-            "alert_id": "AE-MALICIOUS-ADDR-SEND",
-            "type": FindingType.Suspicious,
-            "severity": FindingSeverity.Info,
-            "metadata": {"from": mal_addr, "to": None, "amount": None},
-        }
-    )
-
-    second_alert = Finding(
-        {
-            "name": "Malicious Address Receive",
-            "description": "Malicious address is the target of a transaction",
-            "alert_id": "AE-MALICIOUS-ADDR-RECEIVE",
-            "type": FindingType.Suspicious,
-            "severity": FindingSeverity.Info,
-            "metadata": {"from": None, "to": mal_addr, "amount": None},
-        }
-    )
-
-    third_alert = Finding(
-        {
-            "name": "Malicious Address Intermediary",
+            "name": "Malicious Address Detected",
             "description": "Malicious address is involved with a transaction",
-            "alert_id": "AE-MALICIOUS-ADDR-INTERMEDIARY",
+            "alert_id": "AE-MALICIOUS-ADDR",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Info,
-            "metadata": {"from": None, "to": None, "amount": None},
+            "metadata": {
+                "from": mal_addr,
+                "to": None,
+                "amount": None,
+                "malicious_addresses": mal_addr,
+            },
         }
     )
 
-    return [first_alert, second_alert, third_alert]
+    return malicious_addr_alert
 
 
 def check_alerts(expected_alert, found_alert):
@@ -81,7 +64,7 @@ def test_transaction_normal():
     assert len(findings) == 0
 
 
-def test_malicious_send(alerts, mal_addr):
+def test_malicious_send(alert, mal_addr):
     """
     Create a transaction that should trigger the first alert
     """
@@ -97,10 +80,10 @@ def test_malicious_send(alerts, mal_addr):
     finding = findings[0]
 
     # Check all the properties on the alert
-    check_alerts(alerts[0], finding)
+    check_alerts(alert, finding)
 
 
-def test_malicious_receive(alerts, mal_addr):
+def test_malicious_receive(alert, mal_addr):
     """
     Create a transaction that should trigger the second alert
     """
@@ -116,10 +99,10 @@ def test_malicious_receive(alerts, mal_addr):
     finding = findings[0]
 
     # Check all the properties on the alert
-    check_alerts(alerts[1], finding)
+    check_alerts(alert, finding)
 
 
-def test_malicious_addr(alerts, mal_addr):
+def test_malicious_addr(alert, mal_addr):
     """
     Create a transaction that should trigger the third alert
     """
@@ -133,4 +116,4 @@ def test_malicious_addr(alerts, mal_addr):
     finding = findings[0]
 
     # Check all the properties on the alert
-    check_alerts(alerts[2], finding)
+    check_alerts(alert, finding)
