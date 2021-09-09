@@ -12,12 +12,8 @@ This agent detects transactions that involve a pre-defined malicious address
 
 Describe each of the type of alerts fired by this agent
 
-- AE-MALICIOUS-ADDR-SEND
+- AE-MALICIOUS-ADDR
   - Fired when the malicious address is initiating a transaction
-- AE-MALICIOUS-ADDR-RECEIVE
-  - Fired when the malicious address is the destination of a transaction
-- AE-MALICIOUS-ADDR-INTERMEDIARY
-  - Fired when the malicious address is involved in a transaction
 
 ## Test Data
 
