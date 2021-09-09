@@ -23,7 +23,7 @@ def alerts(mal_addr):
         {
             "name": "Malicious Address Send",
             "description": "Malicious address is starting a transaction",
-            "alert_id": "AE-MALICIOUS-ADDR-1",
+            "alert_id": "AE-MALICIOUS-ADDR-SEND",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Info,
             "metadata": {"from": mal_addr, "to": None, "amount": None},
@@ -34,7 +34,7 @@ def alerts(mal_addr):
         {
             "name": "Malicious Address Receive",
             "description": "Malicious address is the target of a transaction",
-            "alert_id": "AE-MALICIOUS-ADDR-2",
+            "alert_id": "AE-MALICIOUS-ADDR-RECEIVE",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Info,
             "metadata": {"from": None, "to": mal_addr, "amount": None},
@@ -45,7 +45,7 @@ def alerts(mal_addr):
         {
             "name": "Malicious Address Intermediary",
             "description": "Malicious address is involved with a transaction",
-            "alert_id": "AE-MALICIOUS-ADDR-3",
+            "alert_id": "AE-MALICIOUS-ADDR-INTERMEDIARY",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Info,
             "metadata": {"from": None, "to": None, "amount": None},
