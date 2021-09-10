@@ -14,10 +14,10 @@ def alert():
             "alert_id": "AE-UNISWAP",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Medium,
-            "metadata": { 
+            "metadata": {
                 "from": transaction_event.transaction.from_,
                 "to": transaction_event.transaction.to,
-                "amount": value_wei 
+                "amount": value_wei,
             },
         }
     )
@@ -51,11 +51,7 @@ def test_transaction_low_value_eth_token():
     """
     """
     tx_event = create_transaction_event(
-            {"transaction": {
-                "value": Web3.toWei('.01', 'ether'),
-                "to": ROUTER_ADDR,
-                }
-            }
+        {"transaction": {"value": Web3.toWei(".01", "ether"), "to": ROUTER_ADDR}}
     )
     findings = handle_transaction(tx_event)
 
@@ -65,17 +61,23 @@ def test_transaction_low_value_eth_token():
 def test_transaction_low_value_token_eth():
     # Function prototype:
     # swapExactTokensForETH(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)
-    args = [Web3.toWei('1', 'ether'), Web3.toWei('.01', 'ether'), [Web3.toChecksumAddress('0xffffffffffffffffffffffffffffffffffffffff'), Web3.toChecksumAddress('0xffffffffffffffffffffffffffffffffffffffff')], ROUTER_ADDR, 1]
+    args = [
+        Web3.toWei("1", "ether"),
+        Web3.toWei(".01", "ether"),
+        [
+            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
+            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
+        ],
+        ROUTER_ADDR,
+        1,
+    ]
 
     contract = get_contract_instance(ROUTER_ADDR)
-    data = contract.encodeABI(fn_name='swapExactTokensForETH', args=args)
+    data = contract.encodeABI(fn_name="swapExactTokensForETH", args=args)
 
     tx_event = create_transaction_event(
-            {'transaction': {
-                'to': ROUTER_ADDR,
-                'data': data,
-                }
-            })
+        {"transaction": {"to": ROUTER_ADDR, "data": data}}
+    )
     findings = handle_transaction(tx_event)
 
     assert len(findings) == 0
@@ -85,11 +87,7 @@ def test_transaction_high_value_eth_token():
     """
     """
     tx_event = create_transaction_event(
-            {"transaction": {
-                "value": Web3.toWei('100', 'ether'),
-                "to": ROUTER_ADDR,
-                }
-            }
+        {"transaction": {"value": Web3.toWei("100", "ether"), "to": ROUTER_ADDR}}
     )
     findings = handle_transaction(tx_event)
 
@@ -105,17 +103,22 @@ def test_transaction_high_value_eth_token():
 def test_transaction_high_value_token_eth():
     """
     """
-    args = [Web3.toWei('1', 'ether'), Web3.toWei('.01', 'ether'), [Web3.toChecksumAddress('0xffffffffffffffffffffffffffffffffffffffff'), Web3.toChecksumAddress('0xffffffffffffffffffffffffffffffffffffffff')], ROUTER_ADDR, 1]
+    args = [
+        Web3.toWei("1", "ether"),
+        Web3.toWei(".01", "ether"),
+        [
+            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
+            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
+        ],
+        ROUTER_ADDR,
+        1,
+    ]
 
     contract = get_contract_instance(ROUTER_ADDR)
-    data = contract.encodeABI(fn_name='swapExactTokensForETH', args=args)
+    data = contract.encodeABI(fn_name="swapExactTokensForETH", args=args)
 
     tx_event = create_transaction_event(
-            {"transaction": {
-                "to": ROUTER_ADDR,
-                "data": data,
-                }
-            }
+        {"transaction": {"to": ROUTER_ADDR, "data": data}}
     )
     findings = handle_transaction(tx_event)
 
