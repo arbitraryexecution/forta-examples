@@ -25,7 +25,7 @@ def alert(mal_addr):
             "description": "Malicious address is involved with a transaction",
             "alert_id": "AE-MALICIOUS-ADDR",
             "type": FindingType.Suspicious,
-            "severity": FindingSeverity.Info,
+            "severity": FindingSeverity.Medium,
             "metadata": {
                 "from": mal_addr,
                 "to": None,

@@ -12,6 +12,8 @@ This agent checks transactions against a pre-defined list of addresses that are 
 
 - AE-MALICIOUS-ADDR
   - Fired when the malicious address is initiating a transaction
+  - Severity is always set to "medium"
+  - Type is always set to "suspicious"
 
 ## Test Data
 
