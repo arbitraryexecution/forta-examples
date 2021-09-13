@@ -1,23 +1,21 @@
-# High Gas Agent
+# Large Uniswap Detector Agent
 
 ## Description
 
-This agent detects transactions with high gas consumption
+This agent detects large uniswap transactions
 
 ## Supported Chains
 
 - Ethereum
-- List any other chains this agent can support e.g. BSC
 
 ## Alerts
 
 Describe each of the type of alerts fired by this agent
 
-- FORTA-1
-  - Fired when a transaction consumes more gas than 1,000,000 gas
-  - Severity is always set to "medium" (mention any conditions where it could be something else)
-  - Type is always set to "suspicious" (mention any conditions where it could be something else)
-  - Mention any other type of metadata fields included with this alert
+- AE-UNISWAP
+  - Fired when a swap occurs where the value being traded is over .1 ether
+  - Only triggers when either the `swapExactTokensForETH` or `swapExactETHForTokens`
+    functions are called on the AAVE v2 Router Contract (`0x7a250d5630b4cf539739df2c5dacb4c659f2488d')
 
 ## Test Data
 
