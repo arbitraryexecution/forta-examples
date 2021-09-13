@@ -1,12 +1,27 @@
 import pytest
 from web3 import Web3
 
-from forta_agent import FindingSeverity, FindingType, create_transaction_event
+from forta_agent import Finding, FindingSeverity, FindingType, create_transaction_event
 from agent import handle_transaction, get_contract_instance, ROUTER_ADDR
+
+
+BURN_ADDR = "0x000000000000000000000000000000000000dEaD"
+
+
+@pytest.fixture(scope="session")
+def contract():
+    """
+    This fixture will only query the etherscan API once per session. This bypasses
+    the problem of rate limiting when not using an API key
+    """
+    return get_contract_instance(ROUTER_ADDR)
 
 
 @pytest.fixture
 def alert():
+    """
+    Various properties of the alert that is raised inside agent.py
+    """
     alert_large_swap = Finding(
         {
             "name": "Uniswap swap detector",
@@ -14,11 +29,6 @@ def alert():
             "alert_id": "AE-UNISWAP",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Medium,
-            "metadata": {
-                "from": transaction_event.transaction.from_,
-                "to": transaction_event.transaction.to,
-                "amount": value_wei,
-            },
         }
     )
     return alert_large_swap
@@ -38,94 +48,138 @@ def check_alerts(expected_alert, found_alert):
     assert expected_alert.everest_id == found_alert.everest_id
 
 
-def test_transaction_normal():
+def gen_tx_data(value="0", from_=BURN_ADDR, to=BURN_ADDR, data="0x"):
     """
+    Generate a dict containing transaction data to be used in mocking a transaction
     """
-    tx_event = create_transaction_event({})
-    findings = handle_transaction(tx_event)
+    transaction_data = {}
+    transaction_data["value"] = value
+    transaction_data["from_"] = from_
+    transaction_data["to"] = to
+    transaction_data["data"] = data
+
+    return {"transaction": transaction_data}
+
+
+def test_transaction_normal(contract):
+    """
+    Send a benign transaction from one address to another
+    This should not raise an alert
+    """
+    tx_data = gen_tx_data()
+    tx_event = create_transaction_event(tx_data)
+    findings = handle_transaction(tx_event, contract_inst=contract)
 
     assert len(findings) == 0
 
 
-def test_transaction_low_value_eth_token():
+def test_transaction_low_value_eth_token(contract):
     """
+    Send a transaction that trades a low amount of ether (.01 ether) for a token
+    This should not raise an alert as it is below the treshold
     """
-    tx_event = create_transaction_event(
-        {"transaction": {"value": Web3.toWei(".01", "ether"), "to": ROUTER_ADDR}}
+    # Function prototype:
+    # swapExactETHForTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline)
+    args = [Web3.toWei("1", "ether"), [BURN_ADDR, BURN_ADDR], ROUTER_ADDR, 1]
+
+    # Encode the function parameters
+    data = contract.encodeABI(fn_name="swapExactETHForTokens", args=args)
+
+    # Cast the integer returned by toWei() to a string to avoid an integer parsing bug
+    tx_data = gen_tx_data(
+        value=str(Web3.toWei(".01", "ether")), to=ROUTER_ADDR, data=data
     )
-    findings = handle_transaction(tx_event)
+
+    # Generate the mock transaction
+    tx_event = create_transaction_event(tx_data)
+    findings = handle_transaction(tx_event, contract_inst=contract)
 
     assert len(findings) == 0
 
 
-def test_transaction_low_value_token_eth():
+def test_transaction_low_value_token_eth(contract):
+    """
+    Send a transaction that trades a token for a low amount of ether (.01 ether)
+    This should not raise an alert as it is below the threshold
+    """
     # Function prototype:
     # swapExactTokensForETH(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)
     args = [
         Web3.toWei("1", "ether"),
         Web3.toWei(".01", "ether"),
-        [
-            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
-            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
-        ],
+        [BURN_ADDR, BURN_ADDR],
         ROUTER_ADDR,
         1,
     ]
 
-    contract = get_contract_instance(ROUTER_ADDR)
+    # Encode the function parameters
     data = contract.encodeABI(fn_name="swapExactTokensForETH", args=args)
+    tx_data = gen_tx_data(to=ROUTER_ADDR, data=data)
 
-    tx_event = create_transaction_event(
-        {"transaction": {"to": ROUTER_ADDR, "data": data}}
-    )
-    findings = handle_transaction(tx_event)
+    # Generate the mock transaction
+    tx_event = create_transaction_event(tx_data)
+    findings = handle_transaction(tx_event, contract_inst=contract)
 
     assert len(findings) == 0
 
 
-def test_transaction_high_value_eth_token():
+def test_transaction_high_value_eth_token(contract, alert):
     """
+    Send a transaction that trades a high amount of ether (100 ether) for tokens
+    This should raise an alert
     """
-    tx_event = create_transaction_event(
-        {"transaction": {"value": Web3.toWei("100", "ether"), "to": ROUTER_ADDR}}
+    # Function prototype:
+    # swapExactETHForTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline)
+    args = [Web3.toWei("1", "ether"), [BURN_ADDR, BURN_ADDR], ROUTER_ADDR, 1]
+
+    # Encode the function parameters
+    data = contract.encodeABI(fn_name="swapExactETHForTokens", args=args)
+
+    # Cast the integer returned by toWei() to a string to avoid an integer parsing bug
+    tx_data = gen_tx_data(
+        value=str(Web3.toWei("100", "ether")), to=ROUTER_ADDR, data=data
     )
-    findings = handle_transaction(tx_event)
+
+    # Generate the mock transaction
+    tx_event = create_transaction_event(tx_data)
+    findings = handle_transaction(tx_event, contract_inst=contract)
 
     # Only one alert should have triggered
     assert len(findings) == 1
 
     finding = findings[0]
 
-    # Check all the properties of the alert
+    # Checks to ensure the correct alert was raised
     check_alerts(alert, finding)
 
 
-def test_transaction_high_value_token_eth():
+def test_transaction_high_value_token_eth(contract, alert):
     """
+    Send a transaction that trades a token for a high amount of ether (100 ether)
+    This should raise an alert
     """
+    # Function prototype:
+    # swapExactTokensForETH(uint256 amountIn, uint256 amountOutMin, address[] path, address to, uint256 deadline)
     args = [
         Web3.toWei("1", "ether"),
-        Web3.toWei(".01", "ether"),
-        [
-            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
-            Web3.toChecksumAddress("0xffffffffffffffffffffffffffffffffffffffff"),
-        ],
+        Web3.toWei("100", "ether"),
+        [BURN_ADDR, BURN_ADDR],
         ROUTER_ADDR,
         1,
     ]
 
-    contract = get_contract_instance(ROUTER_ADDR)
+    # Encode the function parameters
     data = contract.encodeABI(fn_name="swapExactTokensForETH", args=args)
+    tx_data = gen_tx_data(to=ROUTER_ADDR, data=data)
 
-    tx_event = create_transaction_event(
-        {"transaction": {"to": ROUTER_ADDR, "data": data}}
-    )
-    findings = handle_transaction(tx_event)
+    # Generate the mock transaction
+    tx_event = create_transaction_event(tx_data)
+    findings = handle_transaction(tx_event, contract_inst=contract)
 
     # Only one alert should have triggered
     assert len(findings) == 1
 
     finding = findings[0]
 
-    # Check all the properties of the alert
+    # Checks to ensure the correct alert was raised
     check_alerts(alert, finding)
