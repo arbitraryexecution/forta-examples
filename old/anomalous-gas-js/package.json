@@ -1,5 +1,5 @@
 {
-  "name": "anomalous-gas-js",
+  "name": "anomalous-gas-agent",
   "version": "0.0.1",
   "description": "Forta agent that detects anomalous gas values",
   "scripts": {

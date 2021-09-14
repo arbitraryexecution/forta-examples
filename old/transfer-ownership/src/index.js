@@ -20,7 +20,7 @@ const handleTransaction = async (txEvent) => {
           Finding.fromObject({
             name: eventProto.split("(")[0],
             description: eventProto.split("(")[0],
-            alertId: "OWNERSHIP-TRANSFERED",
+            alertId: "AE-OWNERSHIP-TRANSFERRED",
             severity: FindingSeverity.Low,
             type: FindingType.Degraded,
           })

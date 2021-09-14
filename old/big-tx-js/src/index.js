@@ -12,7 +12,7 @@ const handleTransaction = async (txEvent) => {
       Finding.fromObject({
         name: "High Transaction Value",
         description: `Value: ${ethers.utils.formatEther(txValue)}`,
-        alertId: "AE-FORTA-BIG-TX", // TODO
+        alertId: "AE-BIG-TX",
         severity: FindingSeverity.Low,
         type: FindingType.Suspicious,
       })

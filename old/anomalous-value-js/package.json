@@ -1,5 +1,5 @@
 {
-  "name": "anomalous-value-js",
+  "name": "anomalous-value-agent",
   "version": "0.0.1",
   "description": "Forta agent to identify anomalous value transfers",
   "scripts": {
