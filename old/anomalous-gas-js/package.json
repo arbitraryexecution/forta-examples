@@ -17,7 +17,7 @@
     "assert": "^2.0.0",
     "bignumber.js": "^9.0.1",
     "ethers": "^5.4.3",
-    "forta-agent": "^0.0.8",
+    "forta-agent": "^0.0.11",
     "rolling-math": "^0.0.1"
   },
   "devDependencies": {
