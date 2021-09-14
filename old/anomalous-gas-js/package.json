@@ -18,7 +18,7 @@
     "bignumber.js": "^9.0.1",
     "ethers": "^5.4.3",
     "forta-agent": "^0.0.8",
-    "rolling-math": "git+ssh://git@github.com/arbitraryexecution/rolling-math.git"
+    "rolling-math": "^0.0.1"
   },
   "devDependencies": {
     "jest": "^27.0.6",
