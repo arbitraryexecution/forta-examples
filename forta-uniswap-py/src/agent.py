@@ -1,4 +1,4 @@
-import requests
+import json
 
 from forta_agent import Finding, FindingType, FindingSeverity
 from web3 import Web3
@@ -11,7 +11,7 @@ from web3 import Web3
 #   - UFO -> ETH tx hash: 0xf411bd59818d7e07c3da4de2c5d9f62a3e86e1ad5bc994dcefc7e97a9dcdb7ac
 
 ROUTER_ADDR = Web3.toChecksumAddress("0x7a250d5630b4cf539739df2c5dacb4c659f2488d")
-ETHER_THRESHOLD = Web3.toWei(".1", "ether")
+ETHER_THRESHOLD = Web3.toWei("5", "ether")
 
 # When swapping token x for ETH you can see this by
 # looking at the address and checking the function signature to see which function
@@ -22,18 +22,18 @@ ETHER_THRESHOLD = Web3.toWei(".1", "ether")
 CONTRACT_INST = None
 
 
-def get_contract_abi(addr):
+def get_contract_abi():
     """
     Given the address of a smart contract, return the abi provided by etherscan as a string
     """
-    url = f"https://api.etherscan.io/api?module=contract&action=getabi&address={addr.lower()}"
-    resp = requests.get(url)
-    resp.raise_for_status()
+    # API was retrieved from f"https://api.etherscan.io/api?module=contract&action=getabi&address={ROUTER_ADDR}"
+    with open("router_abi.json", "r") as f:
+        abi = json.loads(f.read())
 
-    return resp.json()["result"]
+    return abi
 
 
-def get_contract_instance(addr):
+def get_contract_instance():
     """
     Get an instance of the contract by using the ABI returned from etherscan.
     This will allow us to encode and decode function parameters
@@ -42,19 +42,18 @@ def get_contract_instance(addr):
     if CONTRACT_INST:
         return CONTRACT_INST
 
-    abi = get_contract_abi(addr)
+    abi = get_contract_abi()
     w3 = Web3()
     CONTRACT_INST = w3.eth.contract(abi=abi)
 
     return CONTRACT_INST
 
 
-def handle_transaction(transaction_event, contract_inst=CONTRACT_INST):
+def handle_transaction(transaction_event):
     """
     Entry point for a transaction
     """
-    if contract_inst is None:
-        contract_inst = get_contract_instance(ROUTER_ADDR)
+    contract_inst = get_contract_instance()
 
     input_data = transaction_event.transaction.data
     if not input_data:
@@ -69,9 +68,11 @@ def handle_transaction(transaction_event, contract_inst=CONTRACT_INST):
     swap_token_eth_method = "0x18cbafe5"
     swap_eth_token_method = "0x7ff36ab5"
 
+    # Ensure the 'to' field exists (will be a None on contract creation) and that it matches
+    # the ROUTER_ADDR
     if (
-        transaction_event.transaction.to.lower()
-        != "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
+        transaction_event.transaction.to
+        and transaction_event.transaction.to.lower() != ROUTER_ADDR.lower()
     ):
         return []
 
@@ -95,7 +96,7 @@ def handle_transaction(transaction_event, contract_inst=CONTRACT_INST):
         {
             "name": "Uniswap swap detector",
             "description": "Large swap on Uniswap detected",
-            "alert_id": "AE-UNISWAP",
+            "alert_id": "AE-UNISWAP-LARGESWAP-METHODID",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Medium,
             "metadata": {

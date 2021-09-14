@@ -2,7 +2,7 @@ import pytest
 from web3 import Web3
 
 from forta_agent import Finding, FindingSeverity, FindingType, create_transaction_event
-from agent import handle_transaction, get_contract_instance, ROUTER_ADDR
+from agent import handle_transaction, get_contract_instance, ROUTER_ADDR, CONTRACT_INST
 
 
 BURN_ADDR = "0x000000000000000000000000000000000000dEaD"
@@ -14,7 +14,7 @@ def contract():
     This fixture will only query the etherscan API once per session. This bypasses
     the problem of rate limiting when not using an API key
     """
-    return get_contract_instance(ROUTER_ADDR)
+    return get_contract_instance()
 
 
 @pytest.fixture
@@ -26,7 +26,7 @@ def alert():
         {
             "name": "Uniswap swap detector",
             "description": "Large swap on Uniswap detected",
-            "alert_id": "AE-UNISWAP",
+            "alert_id": "AE-UNISWAP-LARGESWAP-METHODID",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Medium,
         }
@@ -68,7 +68,7 @@ def test_transaction_normal(contract):
     """
     tx_data = gen_tx_data()
     tx_event = create_transaction_event(tx_data)
-    findings = handle_transaction(tx_event, contract_inst=contract)
+    findings = handle_transaction(tx_event)
 
     assert len(findings) == 0
 
@@ -92,7 +92,7 @@ def test_transaction_low_value_eth_token(contract):
 
     # Generate the mock transaction
     tx_event = create_transaction_event(tx_data)
-    findings = handle_transaction(tx_event, contract_inst=contract)
+    findings = handle_transaction(tx_event)
 
     assert len(findings) == 0
 
@@ -118,7 +118,7 @@ def test_transaction_low_value_token_eth(contract):
 
     # Generate the mock transaction
     tx_event = create_transaction_event(tx_data)
-    findings = handle_transaction(tx_event, contract_inst=contract)
+    findings = handle_transaction(tx_event)
 
     assert len(findings) == 0
 
@@ -142,7 +142,7 @@ def test_transaction_high_value_eth_token(contract, alert):
 
     # Generate the mock transaction
     tx_event = create_transaction_event(tx_data)
-    findings = handle_transaction(tx_event, contract_inst=contract)
+    findings = handle_transaction(tx_event)
 
     # Only one alert should have triggered
     assert len(findings) == 1
@@ -174,7 +174,7 @@ def test_transaction_high_value_token_eth(contract, alert):
 
     # Generate the mock transaction
     tx_event = create_transaction_event(tx_data)
-    findings = handle_transaction(tx_event, contract_inst=contract)
+    findings = handle_transaction(tx_event)
 
     # Only one alert should have triggered
     assert len(findings) == 1
