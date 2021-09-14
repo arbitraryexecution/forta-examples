@@ -35,7 +35,7 @@ describe("blacklisted contract deployment", () => {
         Finding.fromObject({
           name: "Contract Deployment by Blacklisted Address",
           description: `Deployer: ${txEvent.transaction.from}`,
-          alertId: "FORTA-000",
+          alertId: "BLACKLISTED-ADDRESS-DEPLOYMENT",
           type: FindingType.Suspicious,
           severity: FindingSeverity.Low,
           metadata: { contractAddress: contractAddress }

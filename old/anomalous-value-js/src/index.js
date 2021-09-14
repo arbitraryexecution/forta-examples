@@ -4,7 +4,7 @@ const RollingMath = require("rolling-math");
 const { Finding, FindingSeverity, FindingType, getJsonRpcUrl } = require("forta-agent");
 
 const contractAddresses = {};
-const provider = new ethers.providers.WebSocketProvider(getJsonRpcUrl());
+const provider = new ethers.providers.getDefaultProvider(getJsonRpcUrl());
 
 function provideHandleTransaction(provider) {
   return async function handleTransaction(txEvent) {
@@ -12,7 +12,6 @@ function provideHandleTransaction(provider) {
 
     // skip if transaction is contract creation
     if (!txEvent.to) {
-      console.log("skipping");
       return findings;
     }
 
@@ -20,7 +19,6 @@ function provideHandleTransaction(provider) {
 
     // check if we've seen this address
     if (contractAddresses[txEvent.to]) {
-      console.log(`txs total: ${contractAddresses[txEvent.to].getNumElements()}`);
       const average = contractAddresses[txEvent.to].getAverage();
       const standardDeviation = contractAddresses[txEvent.to].getStandardDeviation();
 
@@ -32,7 +30,7 @@ function provideHandleTransaction(provider) {
           Finding.fromObject({
             name: "High Value",
             description: `Value: ${value}`,
-            alertId: "FORTA-1",//TODO
+            alertId: "AE-ANOMALOUS-VALUE",
             severity: FindingSeverity.Medium,
             type: FindingType.Suspicious,
             metadata: { "contract" : txEvent.to },
