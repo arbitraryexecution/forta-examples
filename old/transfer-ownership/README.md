@@ -1,8 +1,8 @@
-# Agent
+# Ownership Transfer Agent
 
 ## Description
 
-This agent 
+This agent detects the OwnershipTransferred and RoleAdminChanged events on Ownable contracts.
 
 ## Supported Chains
 
@@ -10,8 +10,7 @@ This agent
 
 ## Alerts
 
-Describe each of the type of alerts fired by this agent
-
-- 
-  - 
-  - 
+- AE-OWNERSHIP-TRANSFERRED
+  - Fired when the RoleAdminChanged or OwnershipTransferred event occurs
+  - Finding type is always set to "degraded"
+  - Finding severity is always set to "low"
