@@ -2,7 +2,7 @@
 
 ## Description
 
-This agent detects large uniswap transactions
+This agent detects large uniswap transactions on ETH liquidity pools
 
 ## Supported Chains
 
@@ -10,10 +10,8 @@ This agent detects large uniswap transactions
 
 ## Alerts
 
-Describe each of the type of alerts fired by this agent
-
-- AE-UNISWAP-LARGESWAP-METHODID
-  - Fired when a swap occurs where the value being traded is over .1 ether
+- AE-UNISWAP-LARGESWAP-ETH
+  - Fired when a swap occurs where the value being traded is over 5 ether
   - Only triggers when either the `swapExactTokensForETH` or `swapExactETHForTokens`
     functions are called on the AAVE v2 Router Contract (`0x7a250d5630b4cf539739df2c5dacb4c659f2488d')
 

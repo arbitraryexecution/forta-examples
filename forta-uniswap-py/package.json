@@ -1,7 +1,7 @@
 {
-  "name": "uniswap-agent",
+  "name": "uniswap-largeswap-eth-agent",
   "version": "0.0.1",
-  "description": "Detects large Uniswap swaps",
+  "description": "Detects large ETH swaps",
   "scripts": {
     "postinstall": "python3 -m pip install -r requirements_dev.txt",
     "start": "npm run start:dev",

@@ -11,8 +11,7 @@ BURN_ADDR = "0x000000000000000000000000000000000000dEaD"
 @pytest.fixture(scope="session")
 def contract():
     """
-    This fixture will only query the etherscan API once per session. This bypasses
-    the problem of rate limiting when not using an API key
+    Returns a contract instance which allows encoding and decoding of function parameters
     """
     return get_contract_instance()
 
@@ -26,9 +25,9 @@ def alert():
         {
             "name": "Uniswap swap detector",
             "description": "Large swap on Uniswap detected",
-            "alert_id": "AE-UNISWAP-LARGESWAP-METHODID",
+            "alert_id": "AE-UNISWAP-LARGESWAP-ETH",
             "type": FindingType.Suspicious,
-            "severity": FindingSeverity.Medium,
+            "severity": FindingSeverity.Low,
         }
     )
     return alert_large_swap

@@ -35,7 +35,7 @@ def get_contract_abi():
 
 def get_contract_instance():
     """
-    Get an instance of the contract by using the ABI returned from etherscan.
+    Get an instance of the contract by using the ABI saved in 'router_abi.json`
     This will allow us to encode and decode function parameters
     """
     global CONTRACT_INST
@@ -96,14 +96,15 @@ def handle_transaction(transaction_event):
         {
             "name": "Uniswap swap detector",
             "description": "Large swap on Uniswap detected",
-            "alert_id": "AE-UNISWAP-LARGESWAP-METHODID",
+            "alert_id": "AE-UNISWAP-LARGESWAP-ETH",
             "type": FindingType.Suspicious,
-            "severity": FindingSeverity.Medium,
+            "severity": FindingSeverity.Low,
             "metadata": {
                 "from": transaction_event.transaction.from_,
                 "to": transaction_event.transaction.to,
                 "amount": value_wei,
             },
+            "everestId": "0xa2e07f422b5d7cbbfca764e53b251484ecf945fa"
         }
     )
 
