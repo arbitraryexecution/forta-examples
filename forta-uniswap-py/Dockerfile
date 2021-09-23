@@ -15,5 +15,6 @@ ENV NODE_ENV=production
 WORKDIR /app
 COPY ./src ./src
 COPY package*.json ./
+COPY router_abi.json ./
 RUN npm ci --production
 CMD [ "npm", "run", "start:prod" ]
