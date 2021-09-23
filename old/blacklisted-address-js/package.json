@@ -1,5 +1,5 @@
 {
-  "name": "blacklisted-address-agent",
+  "name": "blacklisted-usdt-address-agent",
   "version": "0.0.1",
   "description": "Forta agent that checks if a blacklisted address is involved in *any* transaction",
   "scripts": {
@@ -9,7 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "forta-agent": "^0.0.8",
+    "forta-agent": "^0.0.11",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@ const { Finding, FindingSeverity, FindingType } = require("forta-agent");
 
 const handleTransaction = async (txEvent) => {
   const findings = [];
-  const threshold = ethers.utils.parseUnits("100");
+  const threshold = ethers.utils.parseUnits("700");
   
   const txValue = ethers.BigNumber.from(txEvent.transaction.value);
   if (txValue.gt(threshold)) {
@@ -12,7 +12,7 @@ const handleTransaction = async (txEvent) => {
       Finding.fromObject({
         name: "High Transaction Value",
         description: `Value: ${ethers.utils.formatEther(txValue)}`,
-        alertId: "FORTA-100", // TODO
+        alertId: "AE-BIG-TX",
         severity: FindingSeverity.Low,
         type: FindingType.Suspicious,
       })

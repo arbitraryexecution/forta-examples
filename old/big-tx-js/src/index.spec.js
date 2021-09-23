@@ -27,7 +27,7 @@ describe("high transaction value agent", () => {
     });
 
     it("returns a finding if gas used is above threshold", async () => {
-      const value = ethers.utils.parseEther("101");
+      const value = ethers.utils.parseEther("701");
       const txEvent = createTxEvent({
         transaction: {value: value.toString()},
       });
@@ -38,7 +38,7 @@ describe("high transaction value agent", () => {
         Finding.fromObject({
           name: "High Transaction Value",
           description: `Value: ${ethers.utils.formatEther(value)}`,
-          alertId: "FORTA-100", // TODO
+          alertId: "AE-BIG-TX",
           severity: FindingSeverity.Low,
           type: FindingType.Suspicious,
         }),

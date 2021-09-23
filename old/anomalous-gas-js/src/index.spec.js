@@ -68,7 +68,7 @@ describe("high volume agent", () => {
         Finding.fromObject({
           name: "High Gas Price",
           description: `Gas Price: ${gwei(30)}`,
-          alertId: "FORTA-1",
+          alertId: "AE-ANOMALOUS-GAS",
           type: FindingType.Suspicious,
           severity: FindingSeverity.Medium,
         }),

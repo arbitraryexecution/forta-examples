@@ -56,7 +56,7 @@ describe('monitor banned addresses', () => {
         Finding.fromObject({
           name: 'Blacklisted Address',
           description: `Blacklisted address ${address} was involved in a transaction`,
-          alertId: 'DEMO-3',
+          alertId: 'AE-BLACKLISTED-USDT',
           type: FindingType.Suspicious,
           severity: FindingSeverity.Low,
           metadata: {
