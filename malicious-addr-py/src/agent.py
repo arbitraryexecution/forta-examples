@@ -32,7 +32,7 @@ def handle_transaction(transaction_event):
                     "description": "Malicious address is involved with a transaction",
                     "alert_id": "AE-MALICIOUS-ADDR",
                     "type": FindingType.Suspicious,
-                    "severity": FindingSeverity.Info,
+                    "severity": FindingSeverity.Medium,
                     "metadata": {
                         "from": transaction_event.transaction.from_,
                         "to": transaction_event.transaction.to,
