@@ -85,7 +85,7 @@ def handle_transaction(transaction_event):
     # the ROUTER_ADDR
     if (
         transaction_event.transaction.to
-        and transaction_event.transaction.to.lower() != ROUTER_ADDR.lower()
+        and Web3.toChecksumAddress(transaction_event.transaction.to) != ROUTER_ADDR.lower()
     ):
         return []
 
