@@ -1,7 +1,7 @@
 import pytest
 
 from forta_agent import Finding, FindingSeverity, FindingType, create_transaction_event
-from agent import handle_transaction, ROUTER_ADDR, AttrDict
+from agent import handle_transaction, UNISWAP_V2_ROUTER_ADDR, AttrDict
 
 
 BURN_ADDR = "0x000000000000000000000000000000000000dEaD"
@@ -147,11 +147,10 @@ def gen_log_receipt(event):
 
 def test_transaction_normal():
     """
-    Send a benign transaction from one address to another
+    Mock a normal transaction that doesnt emit a Deposit or Withdrawal event
     This should not raise an alert
     """
-    # Send a normal transaction that doesnt emit a Deposit or Withdrawal event
-    tx_dict = gen_tx_data(to=ROUTER_ADDR)
+    tx_dict = gen_tx_data(to=UNISWAP_V2_ROUTER_ADDR)
     tx_dict.update(gen_tx_receipt())
 
     tx_event = create_transaction_event(tx_dict)
@@ -162,11 +161,11 @@ def test_transaction_normal():
 
 def test_transaction_deposit_event():
     """
-    Send a transaction that trades a low amount of ether (.01 ether) for a token
-    This should not raise an alert as it is below the treshold
+    Mock a transaction that emits a Deposit event
+    This will raise an alert
     """
     # Collect the information needed for mocking up a transaction
-    tx_dict = gen_tx_data(to=ROUTER_ADDR)
+    tx_dict = gen_tx_data(to=UNISWAP_V2_ROUTER_ADDR)
     tx_dict.update(gen_tx_receipt(event="deposit"))
 
     # Generate the mock transaction
@@ -178,11 +177,11 @@ def test_transaction_deposit_event():
 
 def test_transaction_withdraw_event():
     """
-    Send a transaction that trades a token for a low amount of ether (.01 ether)
-    This should not raise an alert as it is below the threshold
+    Mock a transaction that emites a Withdrawal event
+    This will raise an alert
     """
     # Collect the information needed for mocking up a transaction
-    tx_dict = gen_tx_data(to=ROUTER_ADDR)
+    tx_dict = gen_tx_data(to=UNISWAP_V2_ROUTER_ADDR)
     tx_dict.update(gen_tx_receipt(event="withdrawal"))
 
     # Generate the mock transaction

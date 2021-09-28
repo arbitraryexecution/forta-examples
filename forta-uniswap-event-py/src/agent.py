@@ -5,9 +5,7 @@ from forta_agent import Finding, FindingType, FindingSeverity
 from web3 import Web3
 import web3
 
-# Uniswap v2: Router 2
-# 0x7a250d5630b4cf539739df2c5dacb4c659f2488d
-ROUTER_ADDR = Web3.toChecksumAddress("0x7a250d5630b4cf539739df2c5dacb4c659f2488d")
+UNISWAP_V2_ROUTER_ADDR = Web3.toChecksumAddress("0x7a250d5630b4cf539739df2c5dacb4c659f2488d")
 
 ETHER_THRESHOLD = Web3.toWei("5", "ether")
 
@@ -17,8 +15,8 @@ CONTRACT_INST = None
 class AttrDict(dict):
     """
     Allows a dictionary to act as a class object and attributes can be retrieved with
-    the . "dot" notation or the "['']" square bracket notation. This is a very helpful helper
-    class because web3 typically uses square bracket notation while forta-agent uses dot syntax.
+    the . "dot" notation or the "['']" square bracket notation. This is a very useful helper
+    class since web3 typically uses square bracket notation and forta-agent uses dot syntax
     """
 
     def __init__(self, *args, **kwargs):
@@ -62,8 +60,8 @@ def create_alert(to_addr, from_addr, amount_wad):
     """
     return Finding(
         {
-            "name": "Uniswap swap detector",
-            "description": "Large swap on Uniswap detected",
+            "name": "Uniswap V2 swap detector",
+            "description": "Large swap on Uniswap V2 detected",
             "alert_id": "AE-UNISWAP-LARGESWAP-EVENT",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Low,
@@ -82,10 +80,10 @@ def handle_transaction(transaction_event):
         return []
 
     # Ensure the 'to' field exists (will be a None on contract creation) and that it matches
-    # the ROUTER_ADDR
+    # the UNISWAP_V2_ROUTER_ADDR
     if (
         transaction_event.transaction.to
-        and Web3.toChecksumAddress(transaction_event.transaction.to) != ROUTER_ADDR.lower()
+        and Web3.toChecksumAddress(transaction_event.transaction.to) != UNISWAP_V2_ROUTER_ADDR
     ):
         return []
 
@@ -188,7 +186,7 @@ def handle_transaction(transaction_event):
     # Record any Deposit events that are sent to the Uniswap V2 Router address
     # that are above the threshold
     for event in deposit_logs:
-        if event["args"]["dst"] == ROUTER_ADDR:
+        if event["args"]["dst"] == UNISWAP_V2_ROUTER_ADDR:
             if event["args"]["wad"] < ETHER_THRESHOLD:
                 continue
 
@@ -202,7 +200,7 @@ def handle_transaction(transaction_event):
     # Record any Withdrawal events that are sent from the Uniswap V2 Router address
     # that are above the threshold
     for event in withdrawal_logs:
-        if event["args"]["src"] == ROUTER_ADDR:
+        if event["args"]["src"] == UNISWAP_V2_ROUTER_ADDR:
             if event["args"]["wad"] < ETHER_THRESHOLD:
                 continue
 
