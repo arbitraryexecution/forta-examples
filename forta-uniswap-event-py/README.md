@@ -1,4 +1,4 @@
-# Large Uniswap Detector Agent
+# Large Uniswap V2 Detector Agent
 
 ## Description
 

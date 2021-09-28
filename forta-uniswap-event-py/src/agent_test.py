@@ -14,8 +14,8 @@ def alert():
     """
     alert_large_swap = Finding(
         {
-            "name": "Uniswap swap detector",
-            "description": "Large swap on Uniswap detected",
+            "name": "Uniswap V2 swap detector",
+            "description": "Large swap on Uniswap V2 detected",
             "alert_id": "AE-UNISWAP-LARGESWAP-EVENT",
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Low,
@@ -159,7 +159,7 @@ def test_transaction_normal():
     assert len(findings) == 0
 
 
-def test_transaction_deposit_event():
+def test_transaction_deposit_event(alert):
     """
     Mock a transaction that emits a Deposit event
     This will raise an alert
@@ -173,9 +173,10 @@ def test_transaction_deposit_event():
     findings = handle_transaction(tx_event)
 
     assert len(findings) == 1
+    check_alerts(alert, findings[0])
 
 
-def test_transaction_withdraw_event():
+def test_transaction_withdraw_event(alert):
     """
     Mock a transaction that emites a Withdrawal event
     This will raise an alert
@@ -189,3 +190,4 @@ def test_transaction_withdraw_event():
     findings = handle_transaction(tx_event)
 
     assert len(findings) == 1
+    check_alerts(alert, findings[0])
