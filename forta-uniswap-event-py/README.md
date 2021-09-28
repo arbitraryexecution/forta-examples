@@ -2,7 +2,7 @@
 
 ## Description
 
-This agent detects large uniswap transactions on ETH liquidity pools
+This agent detects large Uniswap V2 transactions on ETH liquidity pools.
 
 ## Supported Chains
 
@@ -17,7 +17,7 @@ This agent detects large uniswap transactions on ETH liquidity pools
 
 ## Test Data
 
-The agent behaviour can be verified with the following transactions:
+The agent behavior can be verified with the following transactions:
 
 - 0x0693912717239d8513f4f4af02d401011418381ec0a398d21d6b6dc0bd3d9486
 - 0x1e56a8fc69bae44e22e8de761a08a5d0740348fbe4a0d039262af4545e188614

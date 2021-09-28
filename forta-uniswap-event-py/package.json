@@ -1,7 +1,7 @@
 {
   "name": "uniswap-largeswap-event-agent",
   "version": "0.0.1",
-  "description": "Detects large ETH swaps",
+  "description": "Detects large ETH swaps on the Uniswap V2 exchange",
   "scripts": {
     "postinstall": "python3 -m pip install -r requirements_dev.txt",
     "start": "npm run start:dev",
@@ -15,7 +15,7 @@
     "test": "python3 -m pytest"
   },
   "dependencies": {
-    "forta-agent": "^0.0.14"
+    "forta-agent": "^0.0.16"
   },
   "devDependencies": {
     "nodemon": "^2.0.8"

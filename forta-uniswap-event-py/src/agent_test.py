@@ -86,7 +86,7 @@ def gen_tx_receipt(event=None):
 def gen_log_receipt(event):
     """
     Generate a specific log to be used in creating a transaction receipt. These events were
-    collected from mainnet. Real data was used as its cleaner, simpler, and easier to mock
+    collected from mainnet. Real data was used as it's cleaner, simpler, and easier to mock
     up to test functionality.
     """
     deposit_event = {

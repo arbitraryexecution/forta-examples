@@ -18,7 +18,7 @@ class AttrDict(dict):
     """
     Allows a dictionary to act as a class object and attributes can be retrieved with
     the . "dot" notation or the "['']" square bracket notation. This is a very helpful helper
-    class since web3 typically uses square bracket notation and forta-agent uses dot syntax
+    class because web3 typically uses square bracket notation while forta-agent uses dot syntax.
     """
 
     def __init__(self, *args, **kwargs):
@@ -30,7 +30,7 @@ def get_contract_abi():
     """
     Given the address of a smart contract, return the abi provided by etherscan as a string
     """
-    # API was retrieved from:
+    # ABI was retrieved from:
     #   - https://etherscan.io/address/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2#code
     with open("weth_abi.json", "r") as f:
         abi = json.loads(f.read())
@@ -93,7 +93,7 @@ def handle_transaction(transaction_event):
 
     attr_logs = []
     for log in transaction_event.receipt.logs:
-        # Need to convery the hexadecimal string to binary data for web3
+        # Need to convert the hexadecimal string to binary data for web3
         # Ensure the '0x' is stripped off the beginning of the string before converting
         # Example:
         #   - Convert '0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822'
