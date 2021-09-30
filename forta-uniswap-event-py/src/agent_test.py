@@ -1,7 +1,11 @@
+import json
 import pytest
+import os
+
+from web3 import Web3
 
 from forta_agent import Finding, FindingSeverity, FindingType, create_transaction_event
-from agent import handle_transaction, UNISWAP_V2_ROUTER_ADDR, AttrDict
+from agent import handle_transaction, AttrDict
 
 
 BURN_ADDR = "0x000000000000000000000000000000000000dEaD"
@@ -24,6 +28,19 @@ def alert():
 
     return alert_large_swap
 
+@pytest.fixture
+def uniswap_v2_router_addr():
+    """
+    Load the configureable Uniswap V2 router address.
+    """
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    config_file = os.path.join(dirname, 'config', 'settings.json')
+
+    with open('src/config/settings.json', 'r') as f:
+        data = json.loads(f.read())
+
+    return Web3.toChecksumAddress(data['uniswap_v2_router_addr'])
+
 
 def check_alerts(expected_alert, found_alert):
     """
@@ -33,10 +50,8 @@ def check_alerts(expected_alert, found_alert):
     assert expected_alert.name == found_alert.name
     assert expected_alert.description == found_alert.description
     assert expected_alert.alert_id == found_alert.alert_id
-    assert expected_alert.protocol == found_alert.protocol
     assert expected_alert.severity.value == found_alert.severity.value
     assert expected_alert.type.value == found_alert.type.value
-    assert expected_alert.everest_id == found_alert.everest_id
 
 
 def gen_tx_data(value="0", from_=BURN_ADDR, to=BURN_ADDR, data="0x"):
@@ -145,12 +160,12 @@ def gen_log_receipt(event):
     return AttrDict({})
 
 
-def test_transaction_normal():
+def test_transaction_normal(uniswap_v2_router_addr):
     """
     Mock a normal transaction that doesnt emit a Deposit or Withdrawal event
     This should not raise an alert
     """
-    tx_dict = gen_tx_data(to=UNISWAP_V2_ROUTER_ADDR)
+    tx_dict = gen_tx_data(to=uniswap_v2_router_addr)
     tx_dict.update(gen_tx_receipt())
 
     tx_event = create_transaction_event(tx_dict)
@@ -159,13 +174,13 @@ def test_transaction_normal():
     assert len(findings) == 0
 
 
-def test_transaction_deposit_event(alert):
+def test_transaction_deposit_event(alert, uniswap_v2_router_addr):
     """
     Mock a transaction that emits a Deposit event
     This will raise an alert
     """
     # Collect the information needed for mocking up a transaction
-    tx_dict = gen_tx_data(to=UNISWAP_V2_ROUTER_ADDR)
+    tx_dict = gen_tx_data(to=uniswap_v2_router_addr)
     tx_dict.update(gen_tx_receipt(event="deposit"))
 
     # Generate the mock transaction
@@ -176,13 +191,13 @@ def test_transaction_deposit_event(alert):
     check_alerts(alert, findings[0])
 
 
-def test_transaction_withdraw_event(alert):
+def test_transaction_withdraw_event(alert, uniswap_v2_router_addr):
     """
     Mock a transaction that emites a Withdrawal event
     This will raise an alert
     """
     # Collect the information needed for mocking up a transaction
-    tx_dict = gen_tx_data(to=UNISWAP_V2_ROUTER_ADDR)
+    tx_dict = gen_tx_data(to=uniswap_v2_router_addr)
     tx_dict.update(gen_tx_receipt(event="withdrawal"))
 
     # Generate the mock transaction

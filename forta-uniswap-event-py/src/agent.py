@@ -1,14 +1,14 @@
 import binascii
 import json
+import os
+
+from web3 import logs, Web3
 
 from forta_agent import Finding, FindingType, FindingSeverity
-from web3 import Web3
-import web3
 
-UNISWAP_V2_ROUTER_ADDR = Web3.toChecksumAddress("0x7a250d5630b4cf539739df2c5dacb4c659f2488d")
-
-ETHER_THRESHOLD = Web3.toWei("5", "ether")
-
+UNISWAP_V2_ROUTER_ADDR = None
+ETHER_THRESHOLD = None
+EVEREST_ID = None
 CONTRACT_INST = None
 
 
@@ -22,6 +22,25 @@ class AttrDict(dict):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__dict__ = self
+
+
+def load_config():
+    """
+    Load the configuration values from config/settings.json
+    """
+    global UNISWAP_V2_ROUTER_ADDR
+    global ETHER_THRESHOLD
+    global EVEREST_ID
+
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    config_file = os.path.join(dirname, 'config', 'settings.json')
+
+    with open(config_file, 'r') as f:
+        data = json.loads(f.read())
+
+    UNISWAP_V2_ROUTER_ADDR = Web3.toChecksumAddress(data['uniswap_v2_router_addr'])
+    ETHER_THRESHOLD = data['ether_threshold']
+    EVEREST_ID = data['everest_id']
 
 
 def get_contract_abi():
@@ -66,7 +85,7 @@ def create_alert(to_addr, from_addr, amount_wad):
             "type": FindingType.Suspicious,
             "severity": FindingSeverity.Low,
             "metadata": {"from": from_addr, "to": to_addr, "amount": amount_wad},
-            "everestId": "0xa2e07f422b5d7cbbfca764e53b251484ecf945fa",
+            "everest_id": EVEREST_ID,
         }
     )
 
@@ -172,10 +191,10 @@ def handle_transaction(transaction_event):
     )
 
     deposit_logs = contract_inst.events.Deposit().processReceipt(
-        tx_receipt, errors=web3.logs.DISCARD
+        tx_receipt, errors=logs.DISCARD
     )
     withdrawal_logs = contract_inst.events.Withdrawal().processReceipt(
-        tx_receipt, errors=web3.logs.DISCARD
+        tx_receipt, errors=logs.DISCARD
     )
 
     # If no Deposit or Withdrawal events occurred, don't raise any alerts
@@ -212,3 +231,5 @@ def handle_transaction(transaction_event):
             alerts.append(alert)
 
     return alerts
+
+load_config()
