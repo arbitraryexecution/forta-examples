@@ -26,14 +26,14 @@ class AttrDict(dict):
 
 def load_config():
     """
-    Load the configuration values from config/settings.json
+    Load the configuration values from config/agent-settings.json
     """
     global UNISWAP_V2_ROUTER_ADDR
     global ETHER_THRESHOLD
     global EVEREST_ID
 
     dirname = os.path.dirname(os.path.abspath(__file__))
-    config_file = os.path.join(dirname, 'config', 'settings.json')
+    config_file = os.path.join(dirname, 'config', 'agent-settings.json')
 
     with open(config_file, 'r') as f:
         data = json.loads(f.read())

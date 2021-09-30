@@ -34,9 +34,9 @@ def uniswap_v2_router_addr():
     Load the configureable Uniswap V2 router address.
     """
     dirname = os.path.dirname(os.path.abspath(__file__))
-    config_file = os.path.join(dirname, 'config', 'settings.json')
+    config_file = os.path.join(dirname, 'config', 'agent-settings.json')
 
-    with open('src/config/settings.json', 'r') as f:
+    with open(config_file, 'r') as f:
         data = json.loads(f.read())
 
     return Web3.toChecksumAddress(data['uniswap_v2_router_addr'])
