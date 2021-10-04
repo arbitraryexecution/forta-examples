@@ -6,7 +6,7 @@ const ABI = require("./events.json");
 const EVENTS = ABI.map(ourEvent => ourEvent["name"] + "(" +
   ourEvent["inputs"].map(input => input["type"]).join(",") + ")");
 
-const provider = new ethers.providers.WebSocketProvider(getJsonRpcUrl());
+const provider = new ethers.providers.getDefaultProvider(getJsonRpcUrl());
 
 const handleTransaction = async (txEvent) => {
   const findings = [];
@@ -20,9 +20,9 @@ const handleTransaction = async (txEvent) => {
           Finding.fromObject({
             name: eventProto.split("(")[0],
             description: eventProto.split("(")[0],
-            alertId: "FORTA-1",
-            severity: FindingSeverity.Medium,
-            type: FindingType.Suspicious,
+            alertId: "AE-OWNERSHIP-TRANSFERRED",
+            severity: FindingSeverity.Low,
+            type: FindingType.Degraded,
           })
         );
       }

@@ -19,7 +19,7 @@ const handleTransaction = async (txEvent) => {
       Finding.fromObject({
         name: "Contract Deployment by Blacklisted Address",
         description: `Deployer: ${txEvent.transaction.from}`,
-        alertId: "FORTA-000",
+        alertId: "AE-BLACKLISTED-ADDRESS-DEPLOYMENT",
         severity: FindingSeverity.Low,
         type: FindingType.Suspicious,
         metadata: { contractAddress: contractAddress}
