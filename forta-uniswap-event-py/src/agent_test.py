@@ -163,7 +163,7 @@ def gen_log_receipt(event):
 
 def test_transaction_normal(uniswap_v2_router_addr):
     """
-    Mock a normal transaction that doesnt emit a Deposit or Withdrawal event
+    Mock a normal transaction that doesn't emit a Deposit or Withdrawal event
     This should not raise an alert
     """
     tx_dict = gen_tx_data(to=uniswap_v2_router_addr)
