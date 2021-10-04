@@ -1,5 +1,5 @@
 {
   "uniswap_v2_router_addr": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
-  "ether_threshold": 5000000000000000000,
+  "ether_threshold_wei": 5000000000000000000,
   "everest_id": "0xa2e07f422b5d7cbbfca764e53b251484ecf945fa"
 }

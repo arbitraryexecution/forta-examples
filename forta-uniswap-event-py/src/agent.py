@@ -33,14 +33,14 @@ def load_config():
     global EVEREST_ID
 
     dirname = os.path.dirname(os.path.abspath(__file__))
-    config_file = os.path.join(dirname, 'config', 'agent-settings.json')
+    config_file = os.path.join(dirname, "config", "agent-settings.json")
 
-    with open(config_file, 'r') as f:
+    with open(config_file, "r") as f:
         data = json.loads(f.read())
 
-    UNISWAP_V2_ROUTER_ADDR = Web3.toChecksumAddress(data['uniswap_v2_router_addr'])
-    ETHER_THRESHOLD = data['ether_threshold']
-    EVEREST_ID = data['everest_id']
+    UNISWAP_V2_ROUTER_ADDR = Web3.toChecksumAddress(data["uniswap_v2_router_addr"])
+    ETHER_THRESHOLD = data["ether_threshold_wei"]
+    EVEREST_ID = data["everest_id"]
 
 
 def get_contract_abi():
@@ -75,7 +75,7 @@ def create_alert(to_addr, from_addr, amount_wad):
     Return an alert with a metadata field that contains
         - to address
         - from address
-        - amount in wad
+        - amount in wad format
     """
     return Finding(
         {
@@ -102,7 +102,8 @@ def handle_transaction(transaction_event):
     # the UNISWAP_V2_ROUTER_ADDR
     if (
         transaction_event.transaction.to
-        and Web3.toChecksumAddress(transaction_event.transaction.to) != UNISWAP_V2_ROUTER_ADDR
+        and Web3.toChecksumAddress(transaction_event.transaction.to)
+        != UNISWAP_V2_ROUTER_ADDR
     ):
         return []
 
@@ -231,5 +232,6 @@ def handle_transaction(transaction_event):
             alerts.append(alert)
 
     return alerts
+
 
 load_config()

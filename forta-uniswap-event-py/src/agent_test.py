@@ -1,7 +1,7 @@
 import json
-import pytest
 import os
 
+import pytest
 from web3 import Web3
 
 from forta_agent import Finding, FindingSeverity, FindingType, create_transaction_event
@@ -28,18 +28,19 @@ def alert():
 
     return alert_large_swap
 
+
 @pytest.fixture
 def uniswap_v2_router_addr():
     """
-    Load the configureable Uniswap V2 router address.
+    Load the configurable Uniswap V2 router address.
     """
     dirname = os.path.dirname(os.path.abspath(__file__))
-    config_file = os.path.join(dirname, 'config', 'agent-settings.json')
+    config_file = os.path.join(dirname, "config", "agent-settings.json")
 
-    with open(config_file, 'r') as f:
+    with open(config_file, "r") as f:
         data = json.loads(f.read())
 
-    return Web3.toChecksumAddress(data['uniswap_v2_router_addr'])
+    return Web3.toChecksumAddress(data["uniswap_v2_router_addr"])
 
 
 def check_alerts(expected_alert, found_alert):
@@ -90,8 +91,8 @@ def gen_tx_receipt(event=None):
             "logs_bloom": "0x0",
             "logs": logs,
             "contract_address": None,
-            "block_hash": "0x85d8e4f37fd7146d82d3fdb851668ad88eb5351cd535c5fc3d62a40eed817c92",
-            "block_number": 13282824,
+            "block_hash": "0x0",
+            "block_number": 1,
         }
     )
 
@@ -193,7 +194,7 @@ def test_transaction_deposit_event(alert, uniswap_v2_router_addr):
 
 def test_transaction_withdraw_event(alert, uniswap_v2_router_addr):
     """
-    Mock a transaction that emites a Withdrawal event
+    Mock a transaction that emits a Withdrawal event
     This will raise an alert
     """
     # Collect the information needed for mocking up a transaction
