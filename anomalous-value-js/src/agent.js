@@ -3,7 +3,10 @@ const BigNumber = require("bignumber.js");
 const RollingMath = require("rolling-math");
 const { Finding, FindingSeverity, FindingType, getJsonRpcUrl } = require("forta-agent");
 
+// Need to initialize a dictionary whose keys will be contract addresses the agent encounters and whose
+// values are RollingMath objects tracking the ether values of transactions that touch the contract
 const contractAddresses = {};
+
 const provider = new ethers.providers.getDefaultProvider(getJsonRpcUrl());
 
 function provideHandleTransaction(contractAddresses, provider) {
@@ -29,7 +32,7 @@ function provideHandleTransaction(contractAddresses, provider) {
         findings.push(
           Finding.fromObject({
             name: "Abnormally High Value Transaction",
-            description: `Value: ${value}`,
+            description: `An abnormally high value of ${value} was sent to ${txEvent.to}`,
             alertId: "AE-ANOMALOUS-VALUE",
             severity: FindingSeverity.Medium,
             type: FindingType.Suspicious,
