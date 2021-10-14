@@ -19,7 +19,7 @@ async function handleTransaction(txEvent) {
       && (txEvent.transaction.data.startsWith(METHOD_ID))) {
     findings.push(
       Finding.fromObject({
-        name: 'USDT Transfer',
+        name: 'AE-FUNCTION-CALLED',
         description: `transfer() called on USDT contract by ${from}`,
         alertId: 'DEMO-2',
         type: FindingType.Unknown,

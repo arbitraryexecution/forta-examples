@@ -70,7 +70,7 @@ describe('watch for function call', () => {
 
       expect(findings).toStrictEqual([
         Finding.fromObject({
-          name: 'USDT Transfer',
+          name: 'AE-FUNCTION-CALLED',
           description: `transfer() called on USDT contract by ${from}`,
           alertId: 'DEMO-2',
           type: FindingType.Unknown,
