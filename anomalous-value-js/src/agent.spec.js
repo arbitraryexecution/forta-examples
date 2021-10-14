@@ -116,7 +116,7 @@ describe("anomalous value agent", () => {
       expect(findings).toStrictEqual([
         Finding.fromObject({
           name: "Abnormally High Value Transaction",
-          description: `Value: ${value}`,
+          description: `An abnormally high value of ${value} was sent to ${txEvent.to}`,
           alertId: "AE-ANOMALOUS-VALUE",
           severity: FindingSeverity.Medium,
           type: FindingType.Suspicious,
