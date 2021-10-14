@@ -8,7 +8,6 @@ const provider = new ethers.providers.getDefaultProvider(getJsonRpcUrl());
 
 function provideHandleTransaction(contractAddresses, provider) {
   return async function handleTransaction(txEvent) {
-    //console.log(contractAddresses[txEvent.to]);
     const findings = [];
 
     // skip if transaction is contract creation
@@ -29,7 +28,7 @@ function provideHandleTransaction(contractAddresses, provider) {
           contractAddresses[txEvent.to].getNumElements() > 40) {
         findings.push(
           Finding.fromObject({
-            name: "High Value",
+            name: "Abnormally High Value Transaction",
             description: `Value: ${value}`,
             alertId: "AE-ANOMALOUS-VALUE",
             severity: FindingSeverity.Medium,

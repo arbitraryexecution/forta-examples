@@ -18,7 +18,7 @@ function gwei(numGwei) {
   return oneGwei.times(numGwei);
 }
 
-describe("anomolus value agent", () => {
+describe("anomalous value agent", () => {
   let handleTransaction;
 
   const mockRollingMath = {
@@ -42,7 +42,7 @@ describe("anomolus value agent", () => {
     return new TransactionEvent(type, network, transaction, receipt, traces, addresses, block);
   };
 
-  //eventually put some mock rolling statistics on this test address
+  //initialize a test address ready for mock RollingMath statistics
   const testAddress = '0x1234';
   let contractAddresses = {};
   contractAddresses[testAddress] = mockRollingMath;
@@ -115,7 +115,7 @@ describe("anomolus value agent", () => {
       
       expect(findings).toStrictEqual([
         Finding.fromObject({
-          name: "High Value",
+          name: "Abnormally High Value Transaction",
           description: `Value: ${value}`,
           alertId: "AE-ANOMALOUS-VALUE",
           severity: FindingSeverity.Medium,
