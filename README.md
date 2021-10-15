@@ -1,5 +1,5 @@
 # forta-examples
-This repo contains several examples of Forta agents that monitor for specific events happening on Ethereum. When the agent discovers an event of interest, a Finding is pushed to the scan node. Short description of each agent example as follows:
+This repo contains several examples of Forta agents that monitor for specific events happening on Ethereum. When the agent discovers an event of interest, a Finding is pushed. Short description of each agent example as follows:
 
 ## anomalous-gas-js
 Monitors gas spend of transactions and fires an alert when a gas price 10 standard devations over the last 5000 transactions average is used.
