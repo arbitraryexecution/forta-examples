@@ -1,21 +1,20 @@
-const ethers = require("ethers");
-const BigNumber = require("bignumber.js");
-const { Finding, FindingSeverity, FindingType } = require("forta-agent");
+const ethers = require('ethers');
+const { Finding, FindingSeverity, FindingType } = require('forta-agent');
 
 const handleTransaction = async (txEvent) => {
   const findings = [];
-  const threshold = ethers.utils.parseUnits("700");
-  
+  const threshold = ethers.utils.parseUnits('700');
+
   const txValue = ethers.BigNumber.from(txEvent.transaction.value);
   if (txValue.gt(threshold)) {
     findings.push(
       Finding.fromObject({
-        name: "High Transaction Value",
+        name: 'High Transaction Value',
         description: `Value: ${ethers.utils.formatEther(txValue)}`,
-        alertId: "AE-BIG-TX",
+        alertId: 'AE-BIG-TX',
         severity: FindingSeverity.Low,
         type: FindingType.Suspicious,
-      })
+      }),
     );
   }
 

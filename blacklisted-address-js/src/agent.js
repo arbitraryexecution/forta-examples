@@ -44,4 +44,3 @@ async function handleTransaction(txEvent) {
 module.exports = {
   handleTransaction,
 };
- 

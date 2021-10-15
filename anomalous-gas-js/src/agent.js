@@ -1,9 +1,9 @@
-const BigNumber = require("bignumber.js");
-const { Finding, FindingSeverity, FindingType } = require("forta-agent");
-const RollingMath = require("rolling-math");
+const BigNumber = require('bignumber.js');
+const { Finding, FindingSeverity, FindingType } = require('forta-agent');
+const RollingMath = require('rolling-math');
 
 // rolling average over 5000 transactions
-const rollingMath = new RollingMath(5000);
+const rollingMathVar = new RollingMath(5000);
 
 function provideHandleTransaction(rollingMath) {
   return async function handleTransaction(txEvent) {
@@ -18,12 +18,12 @@ function provideHandleTransaction(rollingMath) {
     if (gasPrice.isGreaterThan(average.plus(standardDeviation.times(10)))) {
       findings.push(
         Finding.fromObject({
-          name: "High Gas Price",
+          name: 'High Gas Price',
           description: `Gas Price: ${gasPrice}`,
-          alertId: "AE-ANOMALOUS-GAS",
+          alertId: 'AE-ANOMALOUS-GAS',
           severity: FindingSeverity.Medium,
           type: FindingType.Suspicious,
-        })
+        }),
       );
     }
 
@@ -34,8 +34,7 @@ function provideHandleTransaction(rollingMath) {
   };
 }
 
-
 module.exports = {
   provideHandleTransaction,
-  handleTransaction: provideHandleTransaction(rollingMath)
-}
+  handleTransaction: provideHandleTransaction(rollingMathVar),
+};

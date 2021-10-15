@@ -65,7 +65,7 @@ describe('watch for function call', () => {
 
       const findings = await handleTransaction(txEvent);
       const {
-        to, from, hash, data,
+        from, hash,
       } = txEvent.transaction;
 
       expect(findings).toStrictEqual([

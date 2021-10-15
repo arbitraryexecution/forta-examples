@@ -1,21 +1,21 @@
-const ethers = require("ethers");
-const BigNumber = require("bignumber.js");
+const ethers = require('ethers');
+const BigNumber = require('bignumber.js');
 
 const {
   TransactionEvent,
   FindingType,
   FindingSeverity,
   Finding,
-} = require("forta-agent");
-const { provideHandleTransaction } = require("./agent");
+} = require('forta-agent');
+const { provideHandleTransaction } = require('./agent');
 
-const oneGwei = new BigNumber(ethers.utils.parseUnits("1", "gwei").toString());
+const oneGwei = new BigNumber(ethers.utils.parseUnits('1', 'gwei').toString());
 
 function gwei(numGwei) {
   return oneGwei.times(numGwei);
 }
 
-describe("high volume agent", () => {
+describe('high volume agent', () => {
   let handleTransaction;
   const mockRollingMath = {
     getAverage: jest.fn(),
@@ -33,10 +33,10 @@ describe("high volume agent", () => {
     handleTransaction = provideHandleTransaction(mockRollingMath);
   });
 
-  describe("handleTransaction", () => {
+  describe('handleTransaction', () => {
     const txEvent = createTxEvent({ gasPrice: gwei(30) });
 
-    it("returns empty findings if gasPrice is below threshold", async () => {
+    it('returns empty findings if gasPrice is below threshold', async () => {
       mockRollingMath.getAverage.mockReturnValueOnce(gwei(10));
       mockRollingMath.getStandardDeviation.mockReturnValueOnce(gwei(2));
 
@@ -49,7 +49,7 @@ describe("high volume agent", () => {
       expect(findings).toStrictEqual([]);
     });
 
-    it("returns a finding if volume is above threshold", async () => {
+    it('returns a finding if volume is above threshold', async () => {
       mockRollingMath.getAverage.mockReset();
       mockRollingMath.getStandardDeviation.mockReset();
       mockRollingMath.addElement.mockReset();
@@ -66,9 +66,9 @@ describe("high volume agent", () => {
 
       expect(findings).toStrictEqual([
         Finding.fromObject({
-          name: "High Gas Price",
+          name: 'High Gas Price',
           description: `Gas Price: ${gwei(30)}`,
-          alertId: "AE-ANOMALOUS-GAS",
+          alertId: 'AE-ANOMALOUS-GAS',
           type: FindingType.Suspicious,
           severity: FindingSeverity.Medium,
         }),
@@ -76,4 +76,3 @@ describe("high volume agent", () => {
     });
   });
 });
- 
