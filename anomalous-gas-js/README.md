@@ -2,7 +2,7 @@
 
 ## Description
 
-This agent alerts when a transaction pays a large amount per gas.
+This agent alerts when a transaction pays an atypically large gas price.
 
 ## Supported Chains
 
@@ -10,7 +10,7 @@ This agent alerts when a transaction pays a large amount per gas.
 
 ## Alerts
 
-Describe each of the type of alerts fired by this agent
-
 - AE-ANOMALOUS-GAS
-  - fires when a transaction uses a gas price that is 10 standard devations over the last 5000 transactions average
+  - Fires when a transaction uses a gas price that is 10 standard devations over the last 5000 transactions average
+  - Severity is always set to "medium"
+  - Type is always set to "suspicious"

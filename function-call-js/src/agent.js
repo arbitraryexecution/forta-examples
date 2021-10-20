@@ -11,22 +11,19 @@ const METHOD_ID = '0xa9059cbb'; // transfer(address _to, uint256 _value)
  */
 async function handleTransaction(txEvent) {
   const findings = [];
-  const {
-    from, hash,
-  } = txEvent.transaction;
+  const { from } = txEvent.transaction;
 
   if ((txEvent.transaction.to === CONTRACT_ADDRESS)
       && (txEvent.transaction.data.startsWith(METHOD_ID))) {
     findings.push(
       Finding.fromObject({
-        name: 'AE-FUNCTION-CALLED',
+        name: 'USDT Transfer Function Call',
         description: `transfer() called on USDT contract by ${from}`,
-        alertId: 'DEMO-2',
-        type: FindingType.Unknown,
+        alertId: 'AE-USDT-TRANSFER-FUNC',
+        type: FindingType.Info,
         severity: FindingSeverity.Info,
         metadata: {
           from,
-          hash,
         },
       }),
     );

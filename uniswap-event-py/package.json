@@ -1,26 +1,23 @@
 {
-  "name": "ownership-transfered-agent",
+  "name": "uniswap-largeswap-event-agent",
   "version": "0.0.1",
-  "description": "Forta agent that alerts whenever any ownership transfer takes place",
+  "description": "Detects large ETH swaps on the Uniswap V2 exchange",
   "scripts": {
+    "postinstall": "python3 -m pip install -r requirements_dev.txt",
     "start": "npm run start:dev",
-    "start:dev": "nodemon --watch src --watch forta.config.json -e js,json --exec 'forta-agent run'",
+    "start:dev": "nodemon --watch src --watch forta.config.json -e py --exec 'forta-agent run'",
     "start:prod": "forta-agent run --prod",
     "tx": "forta-agent run --tx",
     "block": "forta-agent run --block",
     "range": "forta-agent run --range",
     "file": "forta-agent run --file",
     "publish": "forta-agent publish",
-    "test": "jest"
+    "test": "python3 -m pytest"
   },
   "dependencies": {
-    "bignumber.js": "^9.0.1",
-    "ethers": "^5.4.5",
-    "forta-agent": "^0.0.18",
-    "hardhat-ethers": "^1.0.1"
+    "forta-agent": "^0.0.23"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
     "nodemon": "^2.0.8"
   }
 }

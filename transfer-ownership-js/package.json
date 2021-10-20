@@ -1,5 +1,5 @@
 {
-  "name": "ownership-transfered-agent",
+  "name": "ownership-transferred-agent",
   "version": "0.0.1",
   "description": "Forta agent that alerts whenever any ownership transfer takes place",
   "scripts": {

@@ -14,4 +14,5 @@ This agent detects transactions that have a large Ether value relative to other 
   - Fired when the transaction value is over 5 standard deviations from the mean
   - Severity is always set to "medium"
   - Type is always set to "suspicious"
+  - Metadata field contains the destination address of the transaction
 

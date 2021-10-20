@@ -14,3 +14,4 @@ This example agent detects when a contract is deployed by the address 0x099a91d6
   - Triggered if 0x099a91d684585618298250cc376a0531f83ef9a2 deploys a contract
   - Finding type is always set to "suspicious"
   - Finding severity is always set to "low"
+  - Metadata includes the blacklisted address

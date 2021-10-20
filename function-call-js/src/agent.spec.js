@@ -64,20 +64,17 @@ describe('watch for function call', () => {
       });
 
       const findings = await handleTransaction(txEvent);
-      const {
-        from, hash,
-      } = txEvent.transaction;
+      const { from } = txEvent.transaction;
 
       expect(findings).toStrictEqual([
         Finding.fromObject({
-          name: 'AE-FUNCTION-CALLED',
+          name: 'USDT Transfer Function Call',
           description: `transfer() called on USDT contract by ${from}`,
-          alertId: 'DEMO-2',
-          type: FindingType.Unknown,
+          alertId: 'AE-USDT-TRANSFER-FUNC',
+          type: FindingType.Info,
           severity: FindingSeverity.Info,
           metadata: {
             from,
-            hash,
           },
         }),
       ]);
