@@ -1,23 +1,28 @@
 {
-  "name": "malicious-address",
+  "name": "big-tx-agent",
   "version": "0.0.1",
-  "description": "Detects usage of a malicious address",
+  "description": "Forta agent that flags large transaction values",
   "scripts": {
-    "postinstall": "python3 -m pip install -r requirements_dev.txt",
     "start": "npm run start:dev",
-    "start:dev": "nodemon --watch src --watch forta.config.json -e py --exec 'forta-agent run'",
+    "start:dev": "nodemon --watch src --watch forta.config.json -e js,json --exec 'forta-agent run'",
     "start:prod": "forta-agent run --prod",
     "tx": "forta-agent run --tx",
     "block": "forta-agent run --block",
     "range": "forta-agent run --range",
     "file": "forta-agent run --file",
     "publish": "forta-agent publish",
-    "test": "python3 -m pytest"
+    "test": "jest"
   },
   "dependencies": {
+    "bignumber.js": "^9.0.1",
+    "ethers": "^5.4.5",
     "forta-agent": "^0.0.23"
   },
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "jest": "^27.0.6",
     "nodemon": "^2.0.8"
   }
 }

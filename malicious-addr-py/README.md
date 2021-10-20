@@ -14,10 +14,11 @@ This agent checks transactions against a pre-defined list of addresses that are 
   - Fired when the malicious address is initiating a transaction
   - Severity is always set to "medium"
   - Type is always set to "suspicious"
+  - Metadata field contains to and from addresses, transaction value, and the malicious address
 
 ## Test Data
 
-The agent behaviour can be verified with the following block:
+The agent behavior can be verified with the following block:
 - block: 13125071
 
 To run unit tests:
